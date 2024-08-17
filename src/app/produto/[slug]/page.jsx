@@ -1,15 +1,16 @@
 import styles from "./page.module.css";
 import Produto from "@/app/components/Produto";
 
-
 async function getProduto(slug) {
-  const res = await fetch(`https://api.npoint.io/1134cb92d2d567dd34f8/produtos`)
+  const res = await fetch(
+    `https://api.npoint.io/1134cb92d2d567dd34f8/produtos`
+  );
 
-  const produtos = await res.json()
+  const produtos = await res.json();
 
-  const produto = produtos.find(produto => produto.id.toString() === slug)
+  const produto = produtos.find((produto) => produto.id.toString() === slug);
 
-  return produto
+  return produto;
 }
 
 export default async function ProdutoPage({ params }) {
@@ -20,4 +21,18 @@ export default async function ProdutoPage({ params }) {
       <Produto produto={produto} />
     </main>
   );
+}
+
+export async function generateStaticParams() {
+  const res = await fetch(
+    "https://api.npoint.io/1134cb92d2d567dd34f8/produtos"
+  );
+
+  const produtos = await res.json();
+
+  const result = produtos.map((produto) => ({
+    slug: produto.id.toString(),
+  }));
+
+  return result
 }
